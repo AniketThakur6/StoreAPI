@@ -15,11 +15,11 @@ import { useNavigate } from "react-router";
 
 const ProductPage = () => {
   const navigate = useNavigate();
-  const { productData,productRefresh } = useContext(StoreContext);
+  const { productData, productRefresh } = useContext(StoreContext);
 
-  useEffect(()=>{
+  useEffect(() => {
     productRefresh();
-  },[])
+  }, []);
 
   if (!productData) {
     return (
@@ -99,12 +99,32 @@ const ProductPage = () => {
           </div>
         </div>
         {/* Products */}
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {/* Product Card */}
-          {productData?.map((product) => (
-            <ProductCard key={product._id} product={product} />
-          ))}
-        </div>
+
+        {productData.length > 0 ? (
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {/* Product Card */}
+            {productData?.map((product) => (
+              <ProductCard key={product._id} product={product} />
+            ))}
+          </div>
+        ) : (
+          <div className="flex min-h-[60vh] items-center justify-center px-5">
+            <div className="text-center">
+              <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl border border-white/[0.08] bg-white/[0.03]">
+                <Package className="text-zinc-600" size={28} />
+              </div>
+
+              <h1 className="text-xl font-semibold text-zinc-100">
+                Product not found
+              </h1>
+
+              <p className="mt-2 max-w-sm text-sm leading-6 text-zinc-500">
+                The product you're looking for doesn't exist or may have been
+                removed.
+              </p>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );
