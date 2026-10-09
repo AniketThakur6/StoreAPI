@@ -223,6 +223,7 @@ const Register = () => {
             {/* Register button */}
             <button
               type="submit"
+              disabled={isSubmitting}
               className="group flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-orange-500 text-sm font-semibold text-black transition hover:bg-orange-400 active:scale-[0.99]"
             >
               {isSubmitting ? (

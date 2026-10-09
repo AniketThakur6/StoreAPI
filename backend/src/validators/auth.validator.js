@@ -13,7 +13,7 @@ export const registerValidator = [
     .trim()
     .notEmpty().withMessage(`username is can't be Empty`).bail()
     .isLength({min:2,max:50}).withMessage("username length from 2 to 50 charactes").bail()
-    .matches(/^[a-zA-Z][a-zA-Z0-9_]*$/).withMessage("Username must start with a letter and contain only letters, numbers, or underscores"),
+    .matches(/^[a-zA-Z ]+$/).withMessage("Name must contain only letters and spaces"),
   body("password")
     .exists().withMessage('Password is required').bail()
     .isString().withMessage("Password must be String").bail()
