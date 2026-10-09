@@ -1,18 +1,20 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router";
-import RegisterPage from "../pages/RegisterPage";
-import LoginPage from "../pages/LoginPage";
-import ProductPage from "../pages/ProductPage";
-import AddProduct from "../pages/AddProduct";
-import ProductDetails from "../pages/ProductDetails";
-import EditProduct from "../pages/EditProduct";
-import Profile from "../pages/Profile";
-import Logout from "../pages/Logout";
-import NotFound from "../pages/NotFound";
+
 import PublicRoute from "./protected/PublicRoute";
-import HomeLayout from "../layouts/HomeLayout";
 import ProtectedRoute from "./protected/ProtectedRoute";
-import ProductImages from "../pages/ProductImages";
+import HomeLayout from "../layouts/HomeLayout";
+import SessionLoader from "../components/SessionLoader";
+
+const RegisterPage = lazy(() => import("../pages/RegisterPage"));
+const LoginPage = lazy(() => import("../pages/LoginPage"));
+const ProductPage = lazy(() => import("../pages/ProductPage"));
+const AddProduct = lazy(() => import("../pages/AddProduct"));
+const ProductDetails = lazy(() => import("../pages/ProductDetails"));
+const EditProduct = lazy(() => import("../pages/EditProduct"));
+const Profile = lazy(() => import("../pages/Profile"));
+const NotFound = lazy(() => import("../pages/NotFound"));
+const ProductImages = lazy(() => import("../pages/ProductImages"));
 
 const AppRoute = () => {
   const router = createBrowserRouter([
@@ -21,7 +23,6 @@ const AppRoute = () => {
       element: <PublicRoute />,
       children: [
         {
-          path: "",
           index: true,
           element: <LoginPage />,
         },
@@ -36,7 +37,6 @@ const AppRoute = () => {
       element: <HomeLayout />,
       children: [
         {
-          path: "",
           index: true,
           element: <ProductPage />,
         },
@@ -60,9 +60,9 @@ const AppRoute = () => {
               element: <EditProduct />,
             },
             {
-              path: "/profile",
-              element:<Profile />
-            }
+              path: "profile",
+              element: <Profile />,
+            },
           ],
         },
       ],
@@ -73,7 +73,11 @@ const AppRoute = () => {
     },
   ]);
 
-  return <RouterProvider router={router} />;
+  return (
+    <Suspense fallback={<SessionLoader />}>
+      <RouterProvider router={router} />
+    </Suspense>
+  );
 };
 
 export default AppRoute;
