@@ -2,6 +2,7 @@ import userModel from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import { generateToken, verifyRefreshToken } from "./../utils/auth.utils.js";
 import crypto from "crypto";
+import config from "../config/config.js";
 
 export const regsiterController = async (req, res) => {
   const { email, name, password, confirmPassword } = req.body;
@@ -80,7 +81,10 @@ export const loginController = async (req, res) => {
     { returnDocument: "after" },
   );
 
-  res.cookie("refreshToken", refreshToken, { httpOnly: true });
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    secure: config.NODE_ENV === "production",
+  });
 
   res.status(200).json({
     message: "login successful",
@@ -163,7 +167,10 @@ export const refreshTokenController = async (req, res) => {
     user._id,
   );
 
-  res.cookie("refreshToken", newRefreshToken, { httpOnly: true });
+  res.cookie("refreshToken", newRefreshToken, {
+    httpOnly: true,
+    secure: config.NODE_ENV === "production",
+  });
   await userModel.updateOne(
     { _id: user._id },
     {
@@ -183,7 +190,11 @@ export const refreshTokenController = async (req, res) => {
 };
 
 export const getMe = async (req, res) => {
-  const user = await userModel.findById(req.userId, { email: 1, name: 1, createdAt:1 });
+  const user = await userModel.findById(req.userId, {
+    email: 1,
+    name: 1,
+    createdAt: 1,
+  });
 
   if (!user) {
     return res.status(404).json({
@@ -208,7 +219,10 @@ export const logoutController = async (req, res) => {
   const user = await userModel.findById(req.userId);
 
   if (!user) {
-    res.clearCookie("refreshToken", { httpOnly: true });
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: config.NODE_ENV === "production",
+    });
 
     return res.status(404).json({
       message: "User not found",
@@ -222,7 +236,10 @@ export const logoutController = async (req, res) => {
     },
   );
 
-  res.clearCookie("refreshToken", { httpOnly: true });
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    secure: config.NODE_ENV === "production",
+  });
   return res.status(200).json({
     message: "user logged out successfully",
   });

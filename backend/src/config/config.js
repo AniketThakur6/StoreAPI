@@ -11,6 +11,7 @@ const config = {
   REFRESH_TOKEN_EXPIRY: process.env.REFRESH_TOKEN_EXPIRY,
   IMAGEKIT_SECRET_KEY: process.env.IMAGEKIT_SECRET_KEY,
   FRONTEND_URL: process.env.FRONTEND_URL,
+  NODE_ENV: process.env.NODE_ENV,
 };
 
 export default config;
